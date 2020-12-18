@@ -1,0 +1,102 @@
+//fb interstitial ads
+
+//load fb interstitial ads
+public void ShowFullAddFacebook() {
+        Log.d("fullclickghfvsdghf", "loadBachAds: ShowFullAddFacebook function call");
+        Constants.calltintload = 1;
+        interstitialAdbase = new com.facebook.ads.InterstitialAd(this, Constants.FullScrenn_fb_id);
+
+        interstitialAdbase.loadAd(interstitialAdbase.buildLoadAdConfig().withAdListener(new InterstitialAdListener() {
+            @Override
+            public void onInterstitialDisplayed(Ad ad) {
+
+            }
+
+            @Override
+            public void onInterstitialDismissed(Ad ad) {
+                
+            }
+
+            @Override
+            public void onError(Ad ad, AdError adError) {
+               
+            }
+
+            @Override
+            public void onAdLoaded(Ad ad) {
+                
+            }
+
+            @Override
+            public void onAdClicked(Ad ad) {
+
+            }
+
+            @Override
+            public void onLoggingImpression(Ad ad) {
+
+            }
+        }).build());
+        //interstitialAdbase.loadAd();
+
+}
+
+//show fb interstitial ads
+if (interstitialAdbase.isAdLoaded()) {
+     interstitialAdbase.show();
+}
+
+
+=====================================================================
+
+//admob interstitial ads
+
+//load admob interstitial ads
+public void ShowFullAddAdmob() {
+        Log.d("fullclickghfvsdghf", "loadBachAds: ShowFullAddAdmob function call");
+        Constants.calltintload = 1;
+        mInterstitialAdbase = new InterstitialAd(this);
+        mInterstitialAdbase.setAdUnitId(Constants.FullScrenn_admob_id);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mInterstitialAdbase.loadAd(adRequest);
+        mInterstitialAdbase.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+                Log.d("fullclickghfvsdghf", "loadBachAds: admob onAdLoaded");
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                // Code to be executed when an ad request fails.
+                //  Toast.makeText(getApplicationContext(),"Faildes",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when the ad is displayed.
+                //Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the interstitial ad is closed.
+            }
+        });
+}
+
+////show admob interstitial ads
+if (mInterstitialAdbase.isLoaded()) {
+      mInterstitialAdbase.show();
+}

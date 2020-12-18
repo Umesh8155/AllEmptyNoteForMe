@@ -1,0 +1,105 @@
+//get all Contacts of device get (name,birthday,email,phoneNo)
+public void getContactList() throws JSONException {
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), "android.permission.READ_CONTACTS") != 0) {
+
+        } else {
+            ContentResolver cr = getContentResolver();
+            Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
+                    null, null, null, null);
+
+            Log.i("getContactList", "Name: " + cur.getCount());
+
+            if ((cur != null ? cur.getCount() : 0) > 0) {
+                while (cur != null && cur.moveToNext()) {
+                    String id = cur.getString(
+                            cur.getColumnIndex(ContactsContract.Contacts._ID));
+                    String name = cur.getString(cur.getColumnIndex(
+                            ContactsContract.Contacts.DISPLAY_NAME));
+
+                    if (cur.getInt(cur.getColumnIndex(
+                            ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
+                        Cursor pCur = cr.query(
+                                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                null,
+                                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                                new String[]{id}, null);
+                        String phoneNo = "";
+                        if (pCur.getCount() > 0) {
+                            pCur.moveToNext();
+                            phoneNo = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        }
+
+                        Cursor emailCur = cr.query(
+                                ContactsContract.CommonDataKinds.Email.CONTENT_URI,
+                                null,
+                                ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?",
+                                new String[]{id}, null);
+                        String email = "";
+                        if (emailCur.getCount() > 0) {
+                            emailCur.moveToNext();
+                            email = emailCur.getString(emailCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+                        }
+
+                        String columns[] = {
+                                ContactsContract.CommonDataKinds.Event.START_DATE
+                        };
+
+                        String where = ContactsContract.CommonDataKinds.Event.TYPE + "=" + ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY +
+                                " and " + ContactsContract.CommonDataKinds.Event.MIMETYPE + " = '" + ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE + "' and " + ContactsContract.Data.CONTACT_ID + " = " + id;
+
+                        String[] selectionArgs = null;
+                        String sortOrder = ContactsContract.Contacts.DISPLAY_NAME;
+
+                        //Cursor birthdayCur = cr.query(ContactsContract.Data.CONTENT_URI, columns, where, selectionArgs, sortOrder);
+                        String birthday = "";
+                        /*if (birthdayCur.getCount() > 0) {
+                            birthdayCur.moveToNext();
+                            birthday = birthdayCur.getString(birthdayCur.getColumnIndex(ContactsContract.CommonDataKinds.Event.START_DATE));
+
+                            Log.d("ggdfhgdfhdfhgdhgfdh", "getContactList: "+birthday);
+
+                            SimpleDateFormat dateFormatdated = new SimpleDateFormat("yyyy-dd-mm");
+                            Date dateaet189 = null;
+                            try {
+                                dateaet189 = dateFormatdated.parse(birthday);
+                                SimpleDateFormat dateFormat219 = new SimpleDateFormat("yyyy-mm-dd HH:MM:ss.SSS");
+                                birthday = dateFormat219.format(dateaet189);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                            Log.d("ggdfhgdfhdfhgdhgfdh", "getContactList: "+birthday);
+
+                        }*/
+
+                        Log.i("getContactList", "Name: " + name);
+                        Log.i("getContactList", "Phone Number: " + phoneNo);
+                        Log.i("getContactList", "email: " + email);
+                        Log.i("getContactList", "birthday: " + birthday);
+
+                        JSONObject allmainResult = new JSONObject();
+                        allmainResult.put("Title", "");
+                        allmainResult.put("Name", name);
+                        allmainResult.put("DOB", birthday);
+                        allmainResult.put("Email", email);
+                        allmainResult.put("Contactno1", phoneNo);
+                        allmainResult.put("Contactno2", "");
+                        ExtraStory.put(allmainResult);
+
+                        pCur.close();
+
+
+                    }
+                }
+
+                Log.d("getContactListResult", "GetofflineVratKatha: " + ExtraStory);
+
+                SaveContactList();
+
+
+            }
+            if (cur != null) {
+                cur.close();
+            }
+        }
+    }

@@ -1,0 +1,120 @@
+public void GetData() {
+
+        String vercode = String.valueOf(BuildConfig.VERSION_CODE);
+
+        final OkHttpClient client = new OkHttpClient();
+        JSONObject postdata = new JSONObject();
+        try {
+            postdata.put("", "");
+
+
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        //  RequestBody body = RequestBody.create(new URLs().MEDIA_TYPE, postdata.toString());
+        final Request request = new Request.Builder()
+                .url(Glob.ApiName + "Appname=" + Constants.App_Name + "&param1=" + vercode + "&param2=" + "" + "&param3=" + "" + "&DeviceId=" + Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID) + "&Language=" + Constants.languagecusttome
+                )
+                .get()
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // Toast.makeText(getApplicationContext(),"====EEEE",Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response)
+                    throws IOException {
+
+
+                final String responceapi = response.body().string();
+                Log.d("responceapiADS", responceapi);
+                //Log.d("responceapiADS", Glob.ApiName + "Appname=" + Constants.App_Name + "&param1=" + "" + "&param2=" + "" + "&param3=" + "" + "&DeviceId=" + Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID) + "&Language=" + Constants.languagecusttome);
+
+
+                if (response.isSuccessful()) {
+                    try {
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                final JSONObject json;
+                                try {
+                                    json = new JSONObject(responceapi);
+                                    JSONArray jsonArray = json.getJSONArray("Displaylist");
+                                    // JSONArray DisplayList = json.getJSONArray("DisplayList");
+                                    Log.d("DisplayListassss", "" + jsonArray);
+
+                                    String BottomName = "";
+                                    String BottomArrayName = "";
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                        Log.d("jsonObject", "" + jsonObject);
+                                        BottomArrayName = jsonObject.optString("BottomArrayName").toString();
+                                        BottomName = jsonObject.optString(BottomArrayName).toString();
+                                        Log.d("BottomArrayName", "" + BottomArrayName);
+                                        Log.d("BottomName", "" + BottomName);
+                                        JSONObject objname = new JSONObject(BottomName);
+                                        Log.d("objname", "" + objname);
+                                        JSONObject jsonyyy = new JSONObject(BottomName);
+                                        Log.d("jsonyyy", "" + jsonyyy);
+                                        final String finalBottomArrayName = BottomArrayName;
+                                        final String finalBottomName = BottomName;
+
+                                        Log.d("UI thread", "I am the UI thread");
+                                        Log.d("UI thread", "" + finalBottomArrayName);
+
+                                        if (finalBottomArrayName.equals("Home Native")) {
+                                            if (finalBottomArrayName.equals("")) {
+
+
+                                            } else {
+                                                try {
+                                                    final JSONObject HomeBanner = new JSONObject(finalBottomName);
+                                                    Constants.Home_Native_admob_id = HomeBanner.getString("Admob");
+                                                    Constants.Home_Native_fb_id = HomeBanner.getString("Facebook");
+                                                    Constants.Home_Native_types = HomeBanner.getString("Type");
+                                                    Constants.Home_Native_Active = HomeBanner.getString("Active");
+                                                    Constants.Home_Native_Click = HomeBanner.getString("noofclick");
+                                                    Constants.Home_Native_Image = HomeBanner.getString("Image");
+                                                    Constants.Home_Native_Url = HomeBanner.getString("Url");
+                                                    Constants.Home_Native_Alternativesetting = HomeBanner.getString("Alternativesetting");
+
+                                                    Common.setPreferenceString(getActivity(), "adsHome_Native_Image", Constants.Home_Native_Image);
+                                                    Common.setPreferenceString(getActivity(), "adsHome_Native_Url", Constants.Home_Native_Url);
+                                                    Common.setPreferenceString(getActivity(), "adsHome_Native_Active", Constants.Home_Native_Active);
+                                                    Common.setPreferenceString(getActivity(), "adsHome_Native_admob_id", Constants.Home_Native_admob_id);
+                                                    Common.setPreferenceString(getActivity(), "adsHome_Native_fb_id", Constants.Home_Native_fb_id);
+                                                    Common.setPreferenceString(getActivity(), "adsHome_Native_types", Constants.Home_Native_types);
+                                                    Common.setPreferenceString(getActivity(), "adsHome_Native_Click", Constants.Home_Native_Click);
+                                                    Common.setPreferenceString(getActivity(), "adsHome_Native_Alternativesetting", Constants.Home_Native_Alternativesetting);
+
+                                                    HomeNativeads();
+
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+
+                                        } 
+
+                                    }
+
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+
+                            }
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }

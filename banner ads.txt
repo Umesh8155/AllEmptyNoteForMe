@@ -1,0 +1,97 @@
+//fb banner ads
+//ad layout
+<LinearLayout
+    android:id="@+id/banner_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:orientation="vertical" />
+
+//code
+adView = new com.facebook.ads.AdView(getActivity(), Constants.Home_fb_id, com.facebook.ads.AdSize.BANNER_HEIGHT_50);
+adContainer.addView(adView);
+
+adView.loadAd(adView.buildLoadAdConfig().withAdListener(new com.facebook.ads.AdListener() {
+     @Override
+     public void onError(Ad ad, AdError adError) {
+
+     }
+
+     @Override
+     public void onAdLoaded(Ad ad) {
+
+     }
+
+     @Override
+     public void onAdClicked(Ad ad) {
+
+     }
+
+     @Override
+     public void onLoggingImpression(Ad ad) {
+
+     }
+}).build());
+
+================================================================
+
+//admob banner ads
+//ad layout
+<RelativeLayout
+   android:id="@+id/adMobView"
+   android:layout_width="match_parent"
+   android:layout_height="wrap_content"
+   android:layout_alignParentBottom="true"
+   android:background="@color/colorPrimary"
+   android:paddingTop="2dp" />
+
+//code
+
+private AdSize getAdSize() {
+        // Step 2 - Determine the screen width (less decorations) to use for the ad width.
+        android.view.Display display = getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+
+        float widthPixels = outMetrics.widthPixels;
+        float density = outMetrics.density;
+
+        int adWidth = (int) (widthPixels / density);
+
+        // Step 3 - Get adaptive ad size and return for setting on the ad view.
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
+}
+
+final AdView mAdView = new AdView(getActivity());
+
+final AdSize adaptiveSize = getAdSize();
+
+mAdView.setAdSize(adaptiveSize);
+mAdView.setAdUnitId(Constants.Home_admob_id);
+((RelativeLayout) adContainerReletive).addView(mAdView);
+AdRequest adRequest = new AdRequest.Builder()
+       //.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+       //.addTestDevice("C04B1BFFB0774708339BC273F8A43708")
+       .build();
+
+mAdView.setAdListener(new AdListener() {
+   @Override
+   public void onAdLoaded() {
+
+   }
+
+   @Override
+   public void onAdFailedToLoad(int errorCode) {
+
+   }
+
+   @Override
+   public void onAdClicked(Ad ad) {
+
+   }
+
+   @Override
+   public void onLoggingImpression(Ad ad) {
+
+   }
+}).build());

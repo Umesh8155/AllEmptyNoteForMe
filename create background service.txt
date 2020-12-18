@@ -1,0 +1,32 @@
+
+//manifest
+<service
+   android:name=".FestivalInsertIntentService"
+   android:exported="false" />
+
+//BackgroungIntentService class
+public class BackgroungIntentService extends IntentService {
+
+    int Festivalllllll = 0;
+    DatabaseHelper dp;
+
+    public BackgroungIntentService() {
+        super("BackgroungIntentService");
+    }
+
+    @Override
+    protected void onHandleIntent(@Nullable Intent intent) {
+
+        Log.d("iiiihdgfhjdfd", "onHandleIntent BackgroungIntentService: call");
+        
+        //do your work hare
+
+        stopForeground(true);
+
+    }
+
+}
+
+// call //BackgroungIntentServices
+Intent intentEv1 = new Intent(Intent.ACTION_INSERT, null, getActivity(), BackgroungIntentService.class);
+startService(intentEv1);
